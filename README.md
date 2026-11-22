@@ -1,6 +1,6 @@
 # Beanbag with Cat In It
 
-Built a small voxel model: green squashed beanbag with a dip, spotted cat body, round head, ears, four stubby legs and a curled tail.
+Made the ears fold flat against the head, added a darker beanbag underside and lighter top, and a front paw pair.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/beanbag-with-cat-in-it/
 
