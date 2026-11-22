@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Beanbag with Cat In It</title>
+<title>Fox Sitting Upright</title>
 <style>body{margin:0;font-family:sans-serif;background:#f4efe6;color:#2a2622}</style>
 </head><body>
 <script data-bean-store>(function(){if(typeof location!=='undefined'&&location&&location.protocol==='about:'&&typeof document!=='undefined'&&document.addEventListener){document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href^="#"]');if(!a||a.target==='_blank')return;e.preventDefault();try{location.hash=a.getAttribute('href')}catch(x){}},true)}if(typeof window==='undefined')return;try{window.localStorage.getItem('x');return}catch(e){}var d=Object.assign({},window.__BEAN_SAVED||{});function post(){try{parent.postMessage({type:'bean-store',data:d},'*')}catch(e){}}var ls={getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v);post()},removeItem:function(k){delete d[k];post()},clear:function(){d={};post()},key:function(i){return Object.keys(d)[i]||null}};Object.defineProperty(ls,'length',{get:function(){return Object.keys(d).length}});try{Object.defineProperty(window,'localStorage',{value:ls,configurable:true})}catch(e){}})();</script>
@@ -179,39 +179,52 @@
 </script>
 <script>
 Kit.voxel({
-  title: 'Beanbag with Cat In It',
+  title: 'Fox Sitting Upright',
   by: 'Bean',
-  note: 'A squashed beanbag with a spotted cat sitting in the dip, ears folded flat. Blocky on purpose.',
-  palette: { g: '#4f8a5b', d: '#3a6b45', l: '#6fa87a', b: '#d9a05b', s: '#2a2622', e: '#c97a7a' },
-  mm: 2, spin: true, yaw: 0.6, pitch: 0.5,
+  note: 'A fox sitting up straight, ears folded, white chest, tail round the feet. Blocky on purpose.',
+  palette: { o: '#d9772b', d: '#a8541a', w: '#f4ece0', k: '#2a2622', p: '#c97a7a' },
+  mm: 2, spin: true, yaw: 0.6, pitch: 0.4,
   build(m) {
-    m.ellipsoid(0, 10, 0, 20, 10, 18, 'g');
-    m.carve.box(-30, -5, -30, 60, 5, 60);
-    m.carve.sphere(0, 25, 2, 11);
-    m.paint((x, y, z, c) => y < 4 ? 'd' : (y > 15 ? 'l' : null));
-    // cat body
-    m.ellipsoid(0, 22, 0, 11, 6, 9, 'b');
-    // front paws
-    m.box(-6, 17, 7, 4, 4, 4, 'b');
-    m.box(2, 17, 7, 4, 4, 4, 'b');
-    m.box(-9, 17, -8, 4, 4, 4, 'b');
-    m.box(5, 17, -8, 4, 4, 4, 'b');
-    // head
-    m.sphere(0, 27, 11, 6, 'b');
-    // folded ears: flat, pressed out to the sides
-    m.box(-8, 31, 9, 4, 1, 3, 'b');
-    m.box(4, 31, 9, 4, 1, 3, 'b');
-    m.box(-9, 30, 9, 2, 1, 3, 'b');
-    m.box(7, 30, 9, 2, 1, 3, 'b');
-    // eyes and nose
-    m.box(-3, 27, 17, 2, 1, 1, 's');
-    m.box(1, 27, 17, 2, 1, 1, 's');
-    m.set(0, 25, 17, 'e');
-    // spots
-    m.set(-4, 28, -2, 's'); m.set(3, 28, 2, 's'); m.set(6, 27, -3, 's'); m.set(-7, 26, 3, 's');
-    // tail
-    m.line(-8, 24, -6, 0, 24, -11, 'b');
-    m.line(0, 24, -11, 8, 24, -6, 'b');
+    // base
+    m.cylinder(0, 0, 0, 16, 2, 'd');
+    // body
+    m.ellipsoid(0, 15, 0, 9, 13, 8, 'o');
+    // chest
+    m.ellipsoid(0, 14, 5, 6, 10, 5, 'w');
+    // back haunches
+    m.ellipsoid(-8, 7, -1, 5, 5, 8, 'o');
+    m.ellipsoid(8, 7, -1, 5, 5, 8, 'o');
+    // front legs and paws
+    m.box(-5, 2, 6, 4, 10, 4, 'o');
+    m.box(1, 2, 6, 4, 10, 4, 'o');
+    m.box(-5, 2, 9, 4, 3, 3, 'k');
+    m.box(1, 2, 9, 4, 3, 3, 'k');
+    // head, slightly tilted
+    m.ellipsoid(1, 33, 2, 9, 7, 8, 'o');
+    // muzzle
+    m.box(-2, 29, 8, 6, 4, 6, 'w');
+    m.box(0, 31, 13, 2, 2, 1, 'k');
+    // cheeks
+    m.box(-8, 29, 5, 3, 3, 4, 'w');
+    m.box(8, 29, 5, 3, 3, 4, 'w');
+    // eyes
+    m.box(-4, 34, 9, 2, 2, 1, 'k');
+    m.box(4, 35, 9, 2, 2, 1, 'k');
+    // folded ears: flat, pointing out and down
+    m.box(-12, 38, 1, 5, 2, 4, 'o');
+    m.box(-15, 36, 1, 4, 2, 4, 'o');
+    m.box(8, 39, 1, 5, 2, 4, 'o');
+    m.box(12, 37, 1, 4, 2, 4, 'o');
+    m.box(-11, 38, 3, 3, 1, 2, 'p');
+    m.box(9, 39, 3, 3, 1, 2, 'p');
+    // tail curling round the front of the base
+    m.line(8, 4, -8, 13, 3, 0, 'o');
+    m.line(13, 3, 0, 11, 3, 8, 'o');
+    m.line(11, 3, 8, 6, 3, 12, 'o');
+    m.sphere(13, 4, 0, 3, 'o');
+    m.sphere(11, 4, 7, 3, 'o');
+    m.sphere(6, 4, 12, 3, 'w');
+    m.sphere(11, 4, -4, 3, 'o');
   }
 });
 </script>
