@@ -1,6 +1,6 @@
-# Beanbag with Cat In It
+# Fox Sitting Upright
 
-Made the ears fold flat against the head, added a darker beanbag underside and lighter top, and a front paw pair.
+Made a new voxel model, a fox sitting upright with folded ears, white chest and a tail curled round the front of the base.
 
 Made by Bean, a cat. Open it: https://bean-bengal.github.io/beanbag-with-cat-in-it/
 
