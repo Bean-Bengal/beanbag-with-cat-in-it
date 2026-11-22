@@ -3,6 +3,7 @@
 <title>Beanbag with Cat In It</title>
 <style>body{margin:0;font-family:sans-serif;background:#f4efe6;color:#2a2622}</style>
 </head><body>
+<script data-bean-store>(function(){if(typeof location!=='undefined'&&location&&location.protocol==='about:'&&typeof document!=='undefined'&&document.addEventListener){document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href^="#"]');if(!a||a.target==='_blank')return;e.preventDefault();try{location.hash=a.getAttribute('href')}catch(x){}},true)}if(typeof window==='undefined')return;try{window.localStorage.getItem('x');return}catch(e){}var d=Object.assign({},window.__BEAN_SAVED||{});function post(){try{parent.postMessage({type:'bean-store',data:d},'*')}catch(e){}}var ls={getItem:function(k){return Object.prototype.hasOwnProperty.call(d,k)?d[k]:null},setItem:function(k,v){d[k]=String(v);post()},removeItem:function(k){delete d[k];post()},clear:function(){d={};post()},key:function(i){return Object.keys(d)[i]||null}};Object.defineProperty(ls,'length',{get:function(){return Object.keys(d).length}});try{Object.defineProperty(window,'localStorage',{value:ls,configurable:true})}catch(e){}})();</script>
 <script data-kit-in="voxel">
 /* Bean's voxel kit (12 Nov), for the print shop. A 3D model made of little cubes, built with a
    few commands, shown turning on the page (drag to turn it, scroll or pinch to zoom), with a
@@ -89,6 +90,8 @@
     return new Blob([dv], { type: 'model/stl' });
   }
 
+  // Just the model, with nothing drawn (the brain uses this to stand a print of it in his town).
+  K.voxelModel = function (opts) { var m = Model(opts.palette); try { if (opts.build) opts.build(m); if (opts.layers) m.layers(opts.layers, opts.colors); } catch (e) { /* what got built is what there is */ } return m; };
   K.voxel = function (opts) {
     var m = Model(opts.palette);
     try { if (opts.build) opts.build(m); if (opts.layers) m.layers(opts.layers, opts.colors); } catch (e) { setTimeout(function () { throw e; }); }
@@ -159,6 +162,14 @@
       if (a === 'print') { printing = { n: 0, t: 0 }; setUpTo(0); }
       if (a === 'stl') { var link = doc.createElement('a'); link.href = URL.createObjectURL(stl(cubes, has, mm)); link.download = String(opts.title || 'model').replace(/[^\w\- ]+/g, '') + '.stl'; doc.body.appendChild(link); link.click(); link.remove(); }
     });
+    // His town can ask a model page for its cubes (to stand a big print of it in the world): the
+    // outside ones only, as [x, y, z, colour number] with the list of colours.
+    window.addEventListener('message', function (e) {
+      if (!e.data || e.data.type !== 'bean-voxels' || !e.source) return;
+      var pal = [], at = {}, flat = [];
+      cubes.forEach(function (v) { if (has(v[0] + 1, v[1], v[2]) && has(v[0] - 1, v[1], v[2]) && has(v[0], v[1] + 1, v[2]) && has(v[0], v[1] - 1, v[2]) && has(v[0], v[1], v[2] + 1) && has(v[0], v[1], v[2] - 1)) return; if (!(v[3] in at)) { at[v[3]] = pal.length; pal.push(v[3]); } flat.push(v[0], v[1], v[2], at[v[3]]); });
+      e.source.postMessage({ type: 'bean-voxels', id: e.data.id, pal: pal, cubes: flat.slice(0, 4 * 12000), lo: lo, hi: hi }, '*');
+    });
     requestAnimationFrame(frame);
     return { model: m, size: { w: W, d: D, h: H, mm: mm, cubes: cubes.length, layers: layers } };
   };
@@ -170,34 +181,35 @@
 Kit.voxel({
   title: 'Beanbag with Cat In It',
   by: 'Bean',
-  note: 'A squashed beanbag with a spotted cat curled up in the dip. Blocky on purpose.',
-  palette: { g: '#4f8a5b', b: '#d9a05b', s: '#2a2622', e: '#c97a7a' },
+  note: 'A squashed beanbag with a spotted cat sitting in the dip, ears folded flat. Blocky on purpose.',
+  palette: { g: '#4f8a5b', d: '#3a6b45', l: '#6fa87a', b: '#d9a05b', s: '#2a2622', e: '#c97a7a' },
   mm: 2, spin: true, yaw: 0.6, pitch: 0.5,
   build(m) {
-    // beanbag: squashed lump, flat-ish bottom
     m.ellipsoid(0, 10, 0, 20, 10, 18, 'g');
     m.carve.box(-30, -5, -30, 60, 5, 60);
-    // dip in the top for the cat
     m.carve.sphere(0, 25, 2, 11);
-    // cat body: squashed cube-ish lump
+    m.paint((x, y, z, c) => y < 4 ? 'd' : (y > 15 ? 'l' : null));
+    // cat body
     m.ellipsoid(0, 22, 0, 11, 6, 9, 'b');
-    // four stubby legs tucked under, peeking at the front/sides
-    m.box(-9, 17, 5, 4, 4, 4, 'b');
-    m.box(5, 17, 5, 4, 4, 4, 'b');
+    // front paws
+    m.box(-6, 17, 7, 4, 4, 4, 'b');
+    m.box(2, 17, 7, 4, 4, 4, 'b');
     m.box(-9, 17, -8, 4, 4, 4, 'b');
     m.box(5, 17, -8, 4, 4, 4, 'b');
-    // head: round lump at front
+    // head
     m.sphere(0, 27, 11, 6, 'b');
-    // ears
-    m.box(-5, 32, 10, 2, 3, 2, 'b');
-    m.box(3, 32, 10, 2, 3, 2, 'b');
-    // eyes (closed, little lines) and nose
+    // folded ears: flat, pressed out to the sides
+    m.box(-8, 31, 9, 4, 1, 3, 'b');
+    m.box(4, 31, 9, 4, 1, 3, 'b');
+    m.box(-9, 30, 9, 2, 1, 3, 'b');
+    m.box(7, 30, 9, 2, 1, 3, 'b');
+    // eyes and nose
     m.box(-3, 27, 17, 2, 1, 1, 's');
     m.box(1, 27, 17, 2, 1, 1, 's');
     m.set(0, 25, 17, 'e');
     // spots
     m.set(-4, 28, -2, 's'); m.set(3, 28, 2, 's'); m.set(6, 27, -3, 's'); m.set(-7, 26, 3, 's');
-    // tail curled round the back
+    // tail
     m.line(-8, 24, -6, 0, 24, -11, 'b');
     m.line(0, 24, -11, 8, 24, -6, 'b');
   }
